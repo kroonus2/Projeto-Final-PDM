@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <!-- Permissions for internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni"
+        tools:targetApi="31">
+        <activity
+            android:name=".TelaPrincipal"
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TelasProduto.TelaProdutoDeletar"
+            android:exported="false"
+            android:label="@string/title_activity_tela_produto_deletar"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasProduto.TelaProdutoAlterar"
+            android:exported="false"
+            android:label="@string/title_activity_tela_produto_alterar"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasProduto.TelaProdutoMostrar"
+            android:exported="false"
+            android:label="@string/title_activity_tela_produto_mostrar"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasProduto.TelaProdutoInserir"
+            android:exported="false"
+            android:label="@string/title_activity_tela_produto_inserir"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasCliente.TelaClienteDeletar"
+            android:exported="false"
+            android:label="@string/title_activity_tela_cliente_deletar"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasCliente.TelaClienteAlterar"
+            android:exported="false"
+            android:label="@string/title_activity_tela_cliente_alterar"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasCliente.TelaClienteMostrar"
+            android:exported="false"
+            android:label="@string/title_activity_tela_cliente_mostrar"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasCliente.TelaCliente"
+            android:exported="false"
+            android:label="@string/title_activity_tela_cliente"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasCliente.TelaClienteInserir"
+            android:exported="false"
+            android:label="@string/title_activity_tela_cliente_inserir"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasPedido.TelaPedido"
+            android:exported="false"
+            android:label="@string/title_activity_tela_pedido"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
+            android:name=".TelasProduto.TelaProduto"
+            android:exported="false"
+            android:label="@string/title_activity_tela_produto"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+    </application>
+
+</manifest>

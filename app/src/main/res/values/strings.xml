@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">PeSujo-FabricaSapatos-RafaelCaroni</string>
+    <string name="title_activity_tela_cliente">TelaCliente</string>
+    <string name="title_activity_tela_produto">TelaProduto</string>
+    <string name="title_activity_tela_pedido">TelaPedido</string>
+    <string name="title_activity_tela_cliente_inserir">TelaClienteInserir</string>
+    <string name="title_activity_tela_cliente_mostrar">TelaClienteMostrar</string>
+    <string name="title_activity_tela_cliente_alterar">TelaClienteAlterar</string>
+    <string name="title_activity_tela_cliente_deletar">TelaClienteDeletar</string>
+    <string name="title_activity_tela_produto_inserir">TelaProdutoInserir</string>
+    <string name="title_activity_main_activitya">MainActivitya</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_deletardepois">deletardepois</string>
+    <string name="title_activity_tela_produto_mostrar">TelaProdutoMostrar</string>
+    <string name="title_activity_tela_produto_alterar">TelaProdutoAlterar</string>
+    <string name="title_activity_tela_produto_deletar">TelaProdutoDeletar</string>
+</resources>

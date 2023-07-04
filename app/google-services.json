@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "928890637262",
+    "project_id": "pesujo-fabricadesapatos",
+    "storage_bucket": "pesujo-fabricadesapatos.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:928890637262:android:a7d53e6d3858fe8d6cb99f",
+        "android_client_info": {
+          "package_name": "com.example.pesujo_fabricasapatos_rafaelcaroni"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "928890637262-me64ea235vtrb26hketntc6kp08v14q5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqTsMiIX3bU5FtIXV9qcT-K0YDSMRMa2g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "928890637262-me64ea235vtrb26hketntc6kp08v14q5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
