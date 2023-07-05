@@ -36,7 +36,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -46,19 +45,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.tv.material3.Border
-import androidx.tv.material3.ButtonColors
-import androidx.tv.material3.ClickableSurfaceDefaults
-import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasCliente.TelaClienteAlterar
-import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasCliente.TelaClienteDeletar
-import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasCliente.TelaClienteMostrar
-import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasProduto.TelaProdutoInserir
 
 class TelaPedido : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            teste()
+            //teste()
+            ElementosDaTela()
         }
     }
 }
@@ -103,7 +96,7 @@ private fun ElementosDaTela() {
                     contexto.startActivity(
                         Intent(
                             contexto,
-                            TelaProdutoInserir::class.java
+                            TelaPedidoInserir::class.java
                         )
                     )
                 },
@@ -111,65 +104,65 @@ private fun ElementosDaTela() {
                 border = BorderStroke(1.dp, Color.Magenta),
                 colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
             ) {
-                Text(text = "Cadastrar Produto", color = Color.DarkGray, fontSize = 16.sp)
+                Text(text = "Novo Pedido", color = Color.DarkGray, fontSize = 16.sp)
             }
-            Spacer(modifier = Modifier.height(15.dp))
-            Button(
-                onClick = {
-                    contexto.startActivity(
-                        Intent(
-                            contexto,
-                            TelaClienteMostrar::class.java
-                        )
-                    )
-                },
-                modifier = Modifier.width(440.dp),
-                border = BorderStroke(1.dp, Color.Magenta),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-            ) {
-                Text(text = "Listar Produtos", color = Color.DarkGray, fontSize = 16.sp)
-            }
-            Spacer(modifier = Modifier.height(15.dp))
-            Button(
-                onClick = {
-                    contexto.startActivity(
-                        Intent(
-                            contexto,
-                            TelaClienteAlterar::class.java
-                        )
-                    )
-                },
-                modifier = Modifier.width(440.dp),
-                border = BorderStroke(1.dp, Color.Magenta),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-            ) {
-                Text(text = "Alterar Produto", color = Color.DarkGray, fontSize = 16.sp)
-            }
-            Spacer(modifier = Modifier.height(15.dp))
-            Button(
-                onClick = {
-                    contexto.startActivity(
-                        Intent(
-                            contexto,
-                            TelaClienteDeletar::class.java
-                        )
-                    )
-                },
-                modifier = Modifier.width(440.dp),
-                border = BorderStroke(1.dp, Color.Magenta),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-            ) {
-                Text(text = "Deletar Produto", color = Color.DarkGray, fontSize = 16.sp)
-            }
-            Spacer(modifier = Modifier.height(150.dp))
-            Button(
-                onClick = { activity?.finish() },
-                modifier = Modifier.width(440.dp),
-                border = BorderStroke(1.dp, Color.Magenta),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-            ) {
-                Text(text = "Voltar", color = Color.DarkGray, fontSize = 16.sp)
-            }
+//            Spacer(modifier = Modifier.height(15.dp))
+//            Button(
+//                onClick = {
+//                    contexto.startActivity(
+//                        Intent(
+//                            contexto,
+//                            TelaClienteMostrar::class.java
+//                        )
+//                    )
+//                },
+//                modifier = Modifier.width(440.dp),
+//                border = BorderStroke(1.dp, Color.Magenta),
+//                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
+//            ) {
+//                Text(text = "Listar Produtos", color = Color.DarkGray, fontSize = 16.sp)
+//            }
+//            Spacer(modifier = Modifier.height(15.dp))
+//            Button(
+//                onClick = {
+//                    contexto.startActivity(
+//                        Intent(
+//                            contexto,
+//                            TelaClienteAlterar::class.java
+//                        )
+//                    )
+//                },
+//                modifier = Modifier.width(440.dp),
+//                border = BorderStroke(1.dp, Color.Magenta),
+//                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
+//            ) {
+//                Text(text = "Alterar Produto", color = Color.DarkGray, fontSize = 16.sp)
+//            }
+//            Spacer(modifier = Modifier.height(15.dp))
+//            Button(
+//                onClick = {
+//                    contexto.startActivity(
+//                        Intent(
+//                            contexto,
+//                            TelaClienteDeletar::class.java
+//                        )
+//                    )
+//                },
+//                modifier = Modifier.width(440.dp),
+//                border = BorderStroke(1.dp, Color.Magenta),
+//                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
+//            ) {
+//                Text(text = "Deletar Produto", color = Color.DarkGray, fontSize = 16.sp)
+//            }
+//            Spacer(modifier = Modifier.height(150.dp))
+//            Button(
+//                onClick = { activity?.finish() },
+//                modifier = Modifier.width(440.dp),
+//                border = BorderStroke(1.dp, Color.Magenta),
+//                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
+//            ) {
+//                Text(text = "Voltar", color = Color.DarkGray, fontSize = 16.sp)
+//            }
         }
     }
 }
