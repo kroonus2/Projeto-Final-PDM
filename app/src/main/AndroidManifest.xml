@@ -16,6 +16,11 @@
         android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni"
         tools:targetApi="31">
         <activity
+            android:name=".TelasPedido.TelaPedidoMostrar"
+            android:exported="false"
+            android:label="@string/title_activity_tela_pedido_mostrar"
+            android:theme="@style/Theme.PeSujoFabricaSapatosRafaelCaroni" />
+        <activity
             android:name=".TelasPedido.TelaPedidoInserir"
             android:exported="false"
             android:label="@string/title_activity_tela_inserir_pedido"

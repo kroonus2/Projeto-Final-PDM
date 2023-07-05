@@ -1,6 +1,9 @@
 package com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers
 
 import android.app.Activity
+import android.content.Context
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,26 +24,99 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Cliente
+import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Pedido
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
+import com.google.gson.Gson
+import kotlin.coroutines.resume
+import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.suspendCoroutine
 
 class PedidoController {
     private val refPedidos = Firebase.database.getReference("Pedidos")
 
-    fun inserirPedido(){
+    fun inserirPedido(pedido: Pedido, contexto: Context, callback: (Boolean) -> Unit) {
+        refPedidos.child(pedido.idPedido)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (!snapshot.exists()) {
+                        refPedidos.child(pedido.idPedido).setValue(pedido)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    contexto,
+                                    "Pedido Realizado Com Sucesso!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                callback(true)
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    contexto,
+                                    "Erro ao Realizar o pedido",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                callback(false)
+                            }
+                    } else {
+                        Toast.makeText(
+                            contexto,
+                            "Id do Pedido #${pedido.idPedido} já Inserido!",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        callback(false)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        contexto,
+                        "Erro ao Realizar o pedido",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    Log.i("Error", "${error}")
+                    callback(false)
+                }
+            })
+    }
+
+    fun alterarProduto() {
 
     }
 
-    fun alterarProduto(){
+    fun deletarProduto() {
 
     }
 
-    fun deletarProduto(){
+    suspend fun carregarListaPedidos(): ArrayList<Pedido> = suspendCoroutine{ continuation ->
+        val listaRetorno : ArrayList<Pedido> = ArrayList()
 
-    }
+        refPedidos.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    var gson = Gson()
 
-    suspend fun carregarListaPedidos(){
+                    for (i in snapshot.children) {
+                        val json = gson.toJson(i.value)
+                        val pedido = gson.fromJson(json, Pedido::class.java)
 
+                        listaRetorno.add(
+                            Pedido(pedido.idPedido, pedido.data.toString(), pedido.cpf,pedido.produtos)
+                        )
+                        Log.i("ListaRetornoPedidos", "${listaRetorno}")
+                    }
+                    continuation.resume(listaRetorno)
+                }else{
+                    continuation.resumeWithException(Exception("Nenhum Pedido encontrado no banco de dados."))
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                continuation.resumeWithException(error.toException())
+            }
+        })
     }
 
     @Composable

@@ -106,22 +106,22 @@ private fun ElementosDaTela() {
             ) {
                 Text(text = "Novo Pedido", color = Color.DarkGray, fontSize = 16.sp)
             }
-//            Spacer(modifier = Modifier.height(15.dp))
-//            Button(
-//                onClick = {
-//                    contexto.startActivity(
-//                        Intent(
-//                            contexto,
-//                            TelaClienteMostrar::class.java
-//                        )
-//                    )
-//                },
-//                modifier = Modifier.width(440.dp),
-//                border = BorderStroke(1.dp, Color.Magenta),
-//                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-//            ) {
-//                Text(text = "Listar Produtos", color = Color.DarkGray, fontSize = 16.sp)
-//            }
+            Spacer(modifier = Modifier.height(15.dp))
+            Button(
+                onClick = {
+                    contexto.startActivity(
+                        Intent(
+                            contexto,
+                            TelaPedidoMostrar::class.java
+                        )
+                    )
+                },
+                modifier = Modifier.width(440.dp),
+                border = BorderStroke(1.dp, Color.Magenta),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
+            ) {
+                Text(text = "Listar Pedidos", color = Color.DarkGray, fontSize = 16.sp)
+            }
 //            Spacer(modifier = Modifier.height(15.dp))
 //            Button(
 //                onClick = {
@@ -154,15 +154,15 @@ private fun ElementosDaTela() {
 //            ) {
 //                Text(text = "Deletar Produto", color = Color.DarkGray, fontSize = 16.sp)
 //            }
-//            Spacer(modifier = Modifier.height(150.dp))
-//            Button(
-//                onClick = { activity?.finish() },
-//                modifier = Modifier.width(440.dp),
-//                border = BorderStroke(1.dp, Color.Magenta),
-//                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-//            ) {
-//                Text(text = "Voltar", color = Color.DarkGray, fontSize = 16.sp)
-//            }
+            Spacer(modifier = Modifier.height(150.dp))
+            Button(
+                onClick = { activity?.finish() },
+                modifier = Modifier.width(440.dp),
+                border = BorderStroke(1.dp, Color.Magenta),
+                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
+            ) {
+                Text(text = "Voltar", color = Color.DarkGray, fontSize = 16.sp)
+            }
         }
     }
 }
@@ -218,40 +218,4 @@ private fun teste() {
             }
         }
     )
-}
-
-@Composable
-private fun teste2(){
-    var count : Int = 0
-    Surface(
-        shape = RoundedCornerShape(size = 5.dp),
-        border = BorderStroke(1.dp, Color.Red),
-        color = Color.Transparent
-    ) {
-        Box(modifier = Modifier.width(440.dp)){
-            Row() {
-                Button(
-                    onClick = { count-- },
-                    modifier = Modifier.width(40.dp),
-                    border = BorderStroke(1.dp, Color.Magenta),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-                ) {
-                    Text(text = "----", color = Color.DarkGray, fontSize = 16.sp)
-                    Log.i("count", "${count}")
-                }
-                Text(text = "${count}", style = TextStyle(fontSize = 18.sp, textAlign = TextAlign.Center))
-                Button(
-                    onClick = { count++ },
-                    modifier = Modifier.width(40.dp),
-                    border = BorderStroke(1.dp, Color.Magenta),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-                ) {
-                    Text(text = "++++", color = Color.DarkGray, fontSize = 16.sp)
-                    Log.i("count", "${count}")
-                }
-
-            }
-        }
-
-    }
 }

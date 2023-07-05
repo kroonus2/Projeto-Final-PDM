@@ -1,10 +1,10 @@
 package com.example.pesujo_fabricasapatos_rafaelcaroni.Classes
 
-import java.time.LocalDate
+import org.threeten.bp.LocalDateTime;
 
 data class Pedido(
     val idPedido: String,
-    val data: LocalDate,
+    val data: String,
     val cpf: String,
     val produtos: ArrayList<QntdProduto>
 )
