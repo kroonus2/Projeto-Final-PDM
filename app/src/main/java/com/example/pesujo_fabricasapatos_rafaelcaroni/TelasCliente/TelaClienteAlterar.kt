@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Cliente
+import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.ClienteController
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -63,6 +64,8 @@ private fun AlterarClientes(){
     val fieldTelefone: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     val fieldEndereco: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     val fieldInsta: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
+
+    val clienteController = ClienteController()
 
 
     val contexto: Context = LocalContext.current

@@ -43,7 +43,9 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.lifecycleScope
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Cliente
+import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.ClienteController
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -51,20 +53,29 @@ import com.google.firebase.database.ktx.database
 import com.google.firebase.ktx.Firebase
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 
 
 class TelaClienteMostrar : ComponentActivity() {
     lateinit var listaCliente: ArrayList<Cliente>
+    lateinit var clienteController: ClienteController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        listaCliente = intent.getParcelableArrayListExtra("listaRetorno")!!
-
-        setContent {
-            ListagemDeClientes(listaCliente)
-            Log.i("Teste Listagem", "" + listaCliente)
+        clienteController = ClienteController()
+        lifecycleScope.launch{
+            try{
+                listaCliente = clienteController.carregarListaClientes()
+                setContent {
+                    ListagemDeClientes(listaClientes = listaCliente)
+                }
+            }catch (e : Exception){
+                setContent {
+                    clienteController.LoadingScreen()
+                    Log.i("errorCarregarListaClientes", "${e}")
+                }
+            }
         }
     }
 }

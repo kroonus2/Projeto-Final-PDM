@@ -40,6 +40,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Cliente
+import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.ClienteController
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -61,34 +62,14 @@ class TelaClienteDeletar : ComponentActivity() {
 private fun DeletarCliente() {
     val contexto: Context = LocalContext.current
     val activity: Activity? = (LocalContext.current as? Activity)
-
     val fieldCpf: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     val fieldNome: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     val fieldTelefone: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     val fieldEndereco: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     val fieldInsta: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
+    val clienteController = ClienteController()
 
-    val refCliente = Firebase.database.getReference("Clientes")
-    val listaCpfs: MutableList<String> = mutableListOf()
 
-    refCliente.addValueEventListener(object : ValueEventListener {
-        override fun onDataChange(snapshot: DataSnapshot) {
-            if (snapshot.exists()) {
-                var gson = Gson()
-                for (i in snapshot.children) {
-                    val json = gson.toJson(i.value)
-                    val c = gson.fromJson(json, Cliente::class.java)
-                    listaCpfs.add(c.cpf.toString())
-                }
-            }
-           // Log.i("cpf", "${listaCpfs}")
-
-        }
-
-        override fun onCancelled(error: DatabaseError) {
-            Log.i("MENSAGEM", "Erro: $error")
-        }
-    })
 
     Card(
         border = BorderStroke(2.dp, Color.Black),
@@ -136,8 +117,6 @@ private fun DeletarCliente() {
                     border = BorderStroke(1.dp, Color.Magenta),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
                 ) {
-                    //Icon(painter = Icons.Rounded.ShoppingCart, contentDescription =  R.string.shopping_cart_content_desc)
-                    //Image(painterResource(id = R.drawable.ic_cart) , contentDescription = )
                     Text(text = "Voltar", color = Color.DarkGray, fontSize = 16.sp)
                 }
                 Button(
@@ -149,44 +128,12 @@ private fun DeletarCliente() {
                             fieldEndereco.value.text.toString(),
                             fieldInsta.value.text.toString()
                         )
-                        refCliente.child(cliente.cpf).addListenerForSingleValueEvent(object : ValueEventListener{
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                if (snapshot.exists()) {
-                                    refCliente.child(cliente.cpf).removeValue()
-                                        .addOnSuccessListener {
-                                            Toast.makeText(
-                                                contexto,
-                                                "Cliente Deletado Com Sucesso!",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-
-                                            // Limpar os campos após a atualização
-                                            fieldCpf.value = TextFieldValue("")
-                                        }
-                                        .addOnFailureListener{
-                                            Toast.makeText(
-                                                contexto,
-                                                "Erro ao Deletar o cliente",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                }else{
-                                    Toast.makeText(
-                                        contexto,
-                                        "Cliente não encontrado!",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
+                        clienteController.deletarCliente(cliente, contexto){sucesso ->
+                            if(sucesso){
+                                // Limpar os campos após a atualização
+                                fieldCpf.value = TextFieldValue("")
                             }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                Toast.makeText(
-                                    contexto,
-                                    "Erro ao buscar o cliente",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        })
+                        }
                     },
                     modifier = Modifier
                         .padding(15.dp, 15.dp),

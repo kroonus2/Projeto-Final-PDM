@@ -39,6 +39,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Cliente
+import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.ClienteController
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
@@ -63,11 +64,9 @@ private fun InsercaoClientes() {
     val fieldTelefone: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     val fieldEndereco: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     val fieldInsta: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
-
+    val clienteController = ClienteController()
     val contexto: Context = LocalContext.current
     val activity: Activity? = (LocalContext.current as? Activity)
-
-    val refCliente = Firebase.database.getReference("Clientes")
 
     Card(
         border = BorderStroke(2.dp, Color.Black),
@@ -162,8 +161,6 @@ private fun InsercaoClientes() {
                     border = BorderStroke(1.dp, Color.Magenta),
                     colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
                 ) {
-                    //Icon(painter = Icons.Rounded.ShoppingCart, contentDescription =  R.string.shopping_cart_content_desc)
-                    //Image(painterResource(id = R.drawable.ic_cart) , contentDescription = )
                     Text(text = "Voltar", color = Color.DarkGray, fontSize = 16.sp)
                 }
                 Button(
@@ -177,54 +174,19 @@ private fun InsercaoClientes() {
                         if (cpf.isNotEmpty() && nome.isNotEmpty() && telefone.isNotEmpty() && endereco.isNotEmpty() && insta.isNotEmpty()) {
                             val cliente = Cliente(cpf, nome, telefone, endereco, insta)
 
-                            refCliente.child(cliente.cpf).addListenerForSingleValueEvent(object : ValueEventListener {
-                                override fun onDataChange(snapshot: DataSnapshot) {
-                                    if (!snapshot.exists()) {
-                                        refCliente.child(cliente.cpf).setValue(cliente)
-                                            .addOnSuccessListener {
-                                                Toast.makeText(
-                                                    contexto,
-                                                    "Cliente Inserido Com Sucesso!",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-
-                                                // Limpar os campos após a atualização
-                                                fieldCpf.value = TextFieldValue("")
-                                                fieldNome.value = TextFieldValue("")
-                                                fieldTelefone.value = TextFieldValue("")
-                                                fieldEndereco.value = TextFieldValue("")
-                                                fieldInsta.value = TextFieldValue("")
-                                            }
-                                            .addOnFailureListener {
-                                                Toast.makeText(
-                                                    contexto,
-                                                    "Erro ao Inserir o cliente",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
-                                    } else {
-                                        Toast.makeText(
-                                            contexto,
-                                            "Cliente já Inserido!",
-                                            Toast.LENGTH_LONG
-                                        ).show()
-
-                                        // Limpar os campos após a atualização
-                                        fieldCpf.value = TextFieldValue("")
-                                        fieldNome.value = TextFieldValue("")
-                                        fieldTelefone.value = TextFieldValue("")
-                                        fieldEndereco.value = TextFieldValue("")
-                                        fieldInsta.value = TextFieldValue("")
-                                    }
+                            clienteController.inserirCliente(cliente, contexto){sucesso ->
+                                if(sucesso){
+                                    // Limpar os campos após a atualização
+                                    fieldCpf.value = TextFieldValue("")
+                                    fieldNome.value = TextFieldValue("")
+                                    fieldTelefone.value = TextFieldValue("")
+                                    fieldEndereco.value = TextFieldValue("")
+                                    fieldInsta.value = TextFieldValue("")
+                                }else{
+                                    // Limpar os campos após a atualização
+                                    fieldCpf.value = TextFieldValue("")
                                 }
-                                override fun onCancelled(error: DatabaseError) {
-                                    Toast.makeText(
-                                        contexto,
-                                        "Erro ao Inserir o cliente",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            })
+                            }
                         } else {
                             Toast.makeText(
                                 contexto,

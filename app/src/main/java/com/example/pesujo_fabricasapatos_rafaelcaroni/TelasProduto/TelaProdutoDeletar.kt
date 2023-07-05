@@ -134,8 +134,6 @@ private fun DeletarProduto(listaProdutos: ArrayList<Produto>) {
                         produtoController.deletarProduto(selectedItem, contexto){sucesso ->
                             if (sucesso){
                                 activity?.recreate()
-                            }else{
-
                             }
                         }
                     },

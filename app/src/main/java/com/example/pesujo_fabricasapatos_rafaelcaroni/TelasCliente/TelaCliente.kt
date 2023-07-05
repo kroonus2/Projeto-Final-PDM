@@ -51,7 +51,6 @@ class TelaCliente : ComponentActivity() {
 private fun ElementosDaTela() {
     val contexto: Context = LocalContext.current
     val activity: Activity? = (LocalContext.current as? Activity)
-    val listaRetornoCliente : ArrayList<Cliente> = carregarListaClientes()
 
     Card(
         border = BorderStroke(2.dp, Color.Black),
@@ -98,14 +97,11 @@ private fun ElementosDaTela() {
             Spacer(modifier = Modifier.height(15.dp))
             Button(
                 onClick = {
-                    Log.i("FunCliente", ""+listaRetornoCliente)
                     contexto.startActivity(
                         Intent(
                             contexto,
                             TelaClienteMostrar::class.java
-                        ).let {
-                            it.putExtra("listaRetorno",listaRetornoCliente)
-                        }
+                        )
                     )
                 },
                 modifier = Modifier.width(440.dp),
@@ -157,39 +153,4 @@ private fun ElementosDaTela() {
             }
         }
     }
-}
-
-
-private fun carregarListaClientes() : ArrayList<Cliente>{
-
-    val refCliente = Firebase.database.getReference("Clientes")
-    val listaRetorno : ArrayList<Cliente> = ArrayList()
-
-    refCliente.addListenerForSingleValueEvent(object : ValueEventListener{
-        override fun onDataChange(snapshot: DataSnapshot) {
-            if (snapshot.exists()) {
-                var gson = Gson()
-
-                for (i in snapshot.children) {
-                    val json = gson.toJson(i.value)
-                    val cliente = gson.fromJson(json, Cliente::class.java)
-
-                    listaRetorno.add(
-                        Cliente(
-                            cliente.cpf,
-                            cliente.nome,
-                            cliente.telefone,
-                            cliente.endereco,
-                            cliente.instagram
-                        )
-                    )
-                }
-            }
-        }
-        override fun onCancelled(error: DatabaseError) {
-            TODO("Not yet implemented")
-        }
-    })
-
-    return listaRetorno
 }

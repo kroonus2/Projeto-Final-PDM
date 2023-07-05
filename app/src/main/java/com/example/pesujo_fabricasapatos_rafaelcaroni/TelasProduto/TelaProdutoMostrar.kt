@@ -61,7 +61,7 @@ class TelaProdutoMostrar : ComponentActivity() {
             }catch (e : Exception){
                 setContent {
                     produtoController.LoadingScreen()
-                    Log.i("errorPagDeletarProduto", "${e}")
+                    Log.i("errorCarregarListaProdutos", "${e}")
                 }
             }
         }
