@@ -12,19 +12,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Cliente
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Pedido
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -83,16 +86,97 @@ class PedidoController {
             })
     }
 
-    fun alterarProduto() {
+    fun alterarPedido(pedido: Pedido, contexto: Context, callback: (Boolean) -> Unit) {
 
+        refPedidos.child(pedido.idPedido)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        refPedidos.child(pedido.idPedido).setValue(pedido)
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    contexto,
+                                    "Pedido #${pedido.idPedido} Alterado com Sucesso!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                callback(true) // Sucesso na alteração
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    contexto,
+                                    "Erro ao Alterar o Pedido",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                callback(false) // Falha na alteração
+                            }
+                    } else {
+                        Toast.makeText(
+                            contexto,
+                            "Pedido #${pedido.idPedido} não encontrado",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        callback(false) // Falha na alteração
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        contexto,
+                        "Erro ao Alterar o Pedido",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    callback(false) // Falha na alteração
+                }
+            })
     }
 
-    fun deletarProduto() {
 
+    fun deletarPedido(pedido: Pedido, contexto: Context, callback: (Boolean) -> Unit) {
+        refPedidos.child(pedido.idPedido)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        refPedidos.child(pedido.idPedido).removeValue()
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    contexto,
+                                    "Pedido Deletado Com Sucesso!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                callback(true) // Sucesso na exclusão
+                            }
+                            .addOnFailureListener {
+                                Toast.makeText(
+                                    contexto,
+                                    "Erro ao Deletar o pedido",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                callback(false) // Falha na exclusão
+                            }
+                    } else {
+                        Toast.makeText(
+                            contexto,
+                            "Pedido não encontrado!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        callback(false) // Falha na exclusão
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        contexto,
+                        "Erro ao buscar o pedido",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    callback(false) // Falha na exclusão
+                }
+            })
     }
 
-    suspend fun carregarListaPedidos(): ArrayList<Pedido> = suspendCoroutine{ continuation ->
-        val listaRetorno : ArrayList<Pedido> = ArrayList()
+
+    suspend fun carregarListaPedidos(): ArrayList<Pedido> = suspendCoroutine { continuation ->
+        val listaRetorno: ArrayList<Pedido> = ArrayList()
 
         refPedidos.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -104,15 +188,21 @@ class PedidoController {
                         val pedido = gson.fromJson(json, Pedido::class.java)
 
                         listaRetorno.add(
-                            Pedido(pedido.idPedido, pedido.data.toString(), pedido.cpf,pedido.produtos)
+                            Pedido(
+                                pedido.idPedido,
+                                pedido.data.toString(),
+                                pedido.cpf,
+                                pedido.produtos
+                            )
                         )
                         Log.i("ListaRetornoPedidos", "${listaRetorno}")
                     }
                     continuation.resume(listaRetorno)
-                }else{
+                } else {
                     continuation.resumeWithException(Exception("Nenhum Pedido encontrado no banco de dados."))
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 continuation.resumeWithException(error.toException())
             }
@@ -151,4 +241,5 @@ class PedidoController {
             }
         }
     }
+
 }

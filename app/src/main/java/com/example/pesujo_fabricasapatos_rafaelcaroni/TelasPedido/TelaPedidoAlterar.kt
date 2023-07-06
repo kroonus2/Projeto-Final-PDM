@@ -1,7 +1,9 @@
 package com.example.pesujo_fabricasapatos_rafaelcaroni.TelasPedido
 
 import android.app.Activity
+import android.app.Activity.RESULT_OK
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -70,9 +72,10 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
 import org.threeten.bp.format.DateTimeFormatter
 
-class TelaPedidoInserir : ComponentActivity() {
+class TelaPedidoAlterar : ComponentActivity() {
     lateinit var listaClientes: ArrayList<Cliente>
     lateinit var listaProdutos: ArrayList<Produto>
+    lateinit var listaPedidos: ArrayList<Pedido>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,10 +84,12 @@ class TelaPedidoInserir : ComponentActivity() {
         val pedidoController = PedidoController()
         lifecycleScope.launch {
             try {
+                val idPedido: String? = intent.getStringExtra("idPedido")
                 listaClientes = clienteController.carregarListaClientes()
                 listaProdutos = produtoController.carregarListaProdutos()
+                listaPedidos = pedidoController.carregarListaPedidos()
                 setContent {
-                    InserirPedido(listaClientes, listaProdutos)
+                    alterarPedido(listaClientes, listaProdutos, listaPedidos, idPedido)
                 }
             } catch (e: Exception) {
                 setContent {
@@ -92,13 +97,17 @@ class TelaPedidoInserir : ComponentActivity() {
                 }
             }
         }
-
     }
 }
 
 @OptIn(ExperimentalTvMaterial3Api::class, ExperimentalMaterial3Api::class)
 @Composable
-private fun InserirPedido(listaClientes: ArrayList<Cliente>, listaProdutos: ArrayList<Produto>) {
+private fun alterarPedido(
+    listaClientes: ArrayList<Cliente>,
+    listaProdutos: ArrayList<Produto>,
+    listaPedidos: ArrayList<Pedido>,
+    pedidoExistente: String? = null,
+) {
     val produtosSelecionados: MutableList<Produto> = remember { mutableStateListOf() }
     val mapaQntdProduto = remember { mutableStateMapOf<Produto, Int>() }
     val listaQntdProduto = ArrayList<QntdProduto>()
@@ -108,6 +117,17 @@ private fun InserirPedido(listaClientes: ArrayList<Cliente>, listaProdutos: Arra
     val activity: Activity? = (LocalContext.current as? Activity)
     val pedidoController = PedidoController()
 
+    val pedidoExistente: Pedido? = listaPedidos.find { it.idPedido == pedidoExistente }
+
+    // Preencher os campos com os valores do pedido existente, se disponível
+    pedidoExistente?.let { pedido ->
+        fieldCpf.value = TextFieldValue(pedido.cpf)
+        fieldId.value = TextFieldValue(pedido.idPedido)
+        pedido.produtos.forEach { qntdProduto ->
+            mapaQntdProduto[qntdProduto.produto] = qntdProduto.qntd
+            produtosSelecionados.add(qntdProduto.produto)
+        }
+    }
 
     Card(
         border = BorderStroke(2.dp, Color.Black),
@@ -136,7 +156,7 @@ private fun InserirPedido(listaClientes: ArrayList<Cliente>, listaProdutos: Arra
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            "Inserir Pedidos",
+                            "Alterar Pedidos",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -180,7 +200,8 @@ private fun InserirPedido(listaClientes: ArrayList<Cliente>, listaProdutos: Arra
                         ),
                         modifier = Modifier
                             .width(270.dp)
-                            .align(Alignment.CenterHorizontally)
+                            .align(Alignment.CenterHorizontally),
+                        enabled = false
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     OutlinedTextField(
@@ -325,7 +346,7 @@ private fun InserirPedido(listaClientes: ArrayList<Cliente>, listaProdutos: Arra
                                                     listaQntdProduto
                                                 )
 
-                                            pedidoController.inserirPedido(
+                                            pedidoController.alterarPedido(
                                                 pedido,
                                                 contexto
                                             ) { sucesso ->
@@ -333,19 +354,22 @@ private fun InserirPedido(listaClientes: ArrayList<Cliente>, listaProdutos: Arra
                                                     // Pedido realizado com sucesso
                                                     Toast.makeText(
                                                         contexto,
-                                                        "Pedido Realizado Com Sucesso!",
+                                                        "Pedido Alterado Com Sucesso!",
                                                         Toast.LENGTH_SHORT
                                                     ).show()
-                                                    fieldId.value = TextFieldValue("")
-                                                    fieldCpf.value = TextFieldValue("")
+                                                    //activity?.finish()
+                                                    Intent().apply {
+                                                        activity?.setResult(RESULT_OK, this)
+                                                    }
+                                                    activity?.finish()
                                                 } else {
                                                     // Erro ao realizar o pedido
                                                     Toast.makeText(
                                                         contexto,
-                                                        "Erro ao Realizar o pedido",
+                                                        "Erro ao Alterar o pedido",
                                                         Toast.LENGTH_SHORT
                                                     ).show()
-                                                    fieldId.value = TextFieldValue("")
+                                                    activity?.finish()
                                                 }
                                             }
                                         } else {

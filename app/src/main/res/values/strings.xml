@@ -16,4 +16,5 @@
     <string name="title_activity_tela_produto_deletar">TelaProdutoDeletar</string>
     <string name="title_activity_tela_inserir_pedido">TelaInserirPedido</string>
     <string name="title_activity_tela_pedido_mostrar">TelaPedidoMostrar</string>
+    <string name="title_activity_tela_pedido_alterar">TelaPedidoAlterar</string>
 </resources>
