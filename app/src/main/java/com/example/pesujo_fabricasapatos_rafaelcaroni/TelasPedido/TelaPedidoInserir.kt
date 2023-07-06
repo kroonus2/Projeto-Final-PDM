@@ -2,6 +2,7 @@ package com.example.pesujo_fabricasapatos_rafaelcaroni.TelasPedido
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -20,17 +21,26 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,10 +50,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,6 +77,8 @@ import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.QntdProduto
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.ClienteController
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.PedidoController
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.ProdutoController
+import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasCliente.TelaCliente
+import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasProduto.TelaProduto
 import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.ZoneId
@@ -108,6 +122,8 @@ private fun InserirPedido(listaClientes: ArrayList<Cliente>, listaProdutos: Arra
     val activity: Activity? = (LocalContext.current as? Activity)
     val pedidoController = PedidoController()
 
+    var expanded by remember { mutableStateOf(false) }
+
 
     Card(
         border = BorderStroke(2.dp, Color.Black),
@@ -142,18 +158,99 @@ private fun InserirPedido(listaClientes: ArrayList<Cliente>, listaProdutos: Arra
                         )
                     },
                     actions = {
-                        IconButton(onClick = { activity?.finish() }) {
+                        IconButton(onClick = { expanded = !expanded }) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .wrapContentSize(Alignment.TopStart)
+                            ) {
+                                DropdownMenu(
+                                    expanded = expanded,
+                                    onDismissRequest = { expanded = false }
+                                ) {
+                                    DropdownMenuItem(
+                                        text = { Text("Clientes") },
+                                        onClick = {
+                                            contexto.startActivity(
+                                                Intent(
+                                                    contexto,
+                                                    TelaCliente::class.java
+                                                )
+                                            )
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Outlined.Person,
+                                                contentDescription = null
+                                            )
+                                        })
+                                    DropdownMenuItem(
+                                        text = { Text("Produtos") },
+                                        onClick = {
+                                            contexto.startActivity(
+                                                Intent(
+                                                    contexto,
+                                                    TelaProduto::class.java
+                                                )
+                                            )
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Outlined.List,
+                                                contentDescription = null
+                                            )
+                                        })
+                                    DropdownMenuItem(
+                                        text = { Text("Pedidos") },
+                                        onClick = {
+                                            contexto.startActivity(
+                                                Intent(
+                                                    contexto,
+                                                    TelaPedido::class.java
+                                                )
+                                            )
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Outlined.AddCircle,
+                                                contentDescription = null
+                                            )
+                                        })
+                                    Divider()
+                                    DropdownMenuItem(
+                                        text = { Text("Enviar Feedback") },
+                                        onClick = {
+                                            Toast.makeText(
+                                                contexto,
+                                                "Sua mensagem será encaminhada para a caixa de mensagens",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Outlined.Email,
+                                                contentDescription = null
+                                            )
+                                        },
+                                        trailingIcon = {
+                                            Text(
+                                                "F11",
+                                                textAlign = TextAlign.Center
+                                            )
+                                        })
+                                }
+                            }
                             Icon(
-                                imageVector = Icons.Filled.KeyboardArrowLeft,
-                                contentDescription = "Voltar"
+                                imageVector = Icons.Filled.Menu,
+                                contentDescription = "Localized description"
                             )
                         }
                     },
                     navigationIcon = {
-                        IconButton(onClick = { }) {
+                        IconButton(onClick = { activity?.finish() }) {
                             Icon(
-                                imageVector = Icons.Filled.Menu,
-                                contentDescription = "Localized description"
+                                imageVector = Icons.Filled.KeyboardArrowLeft,
+                                contentDescription = "Voltar"
                             )
                         }
                     },
@@ -386,3 +483,4 @@ private fun InserirPedido(listaClientes: ArrayList<Cliente>, listaProdutos: Arra
         )
     }
 }
+

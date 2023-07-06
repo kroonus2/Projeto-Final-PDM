@@ -110,38 +110,6 @@ private fun ElementosDaTela() {
             ) {
                 Text(text = "Listar Clientes", color = Color.DarkGray, fontSize = 16.sp)
             }
-            Spacer(modifier = Modifier.height(15.dp))
-            Button(
-                onClick = {
-                    contexto.startActivity(
-                        Intent(
-                            contexto,
-                            TelaClienteAlterar::class.java
-                        )
-                    )
-                },
-                modifier = Modifier.width(440.dp),
-                border = BorderStroke(1.dp, Color.Magenta),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-            ) {
-                Text(text = "Alterar Cliente", color = Color.DarkGray, fontSize = 16.sp)
-            }
-            Spacer(modifier = Modifier.height(15.dp))
-            Button(
-                onClick = {
-                    contexto.startActivity(
-                        Intent(
-                            contexto,
-                            TelaClienteDeletar::class.java
-                        )
-                    )
-                },
-                modifier = Modifier.width(440.dp),
-                border = BorderStroke(1.dp, Color.Magenta),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-            ) {
-                Text(text = "Deletar Cliente", color = Color.DarkGray, fontSize = 16.sp)
-            }
             Spacer(modifier = Modifier.height(150.dp))
             Button(
                 onClick = { activity?.finish() },
