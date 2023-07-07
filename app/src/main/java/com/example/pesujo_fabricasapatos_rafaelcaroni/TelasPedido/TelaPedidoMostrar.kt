@@ -9,8 +9,6 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -29,7 +27,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.AddCircle
@@ -47,7 +44,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -138,7 +134,7 @@ private fun ListagemDePedidos(listaPedidos: ArrayList<Pedido>) {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            "Inserir Pedidos",
+                            "Mostrar Pedidos",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -327,15 +323,6 @@ private fun ListagemDePedidos(listaPedidos: ArrayList<Pedido>) {
                                         )
                                     }
                                     IconButton(onClick = {
-//                                        contexto.startActivity(
-//                                            Intent(
-//                                                contexto,
-//                                                TelaPedidoAlterar::class.java
-//                                            ).apply {
-//                                                putExtra("idPedido", pedido.idPedido.toString())
-//                                            }
-//                                        )
-                                        // Inicie a atividade usando requestActivityResult
                                         requestActivityResult.launch(
                                             Intent(contexto, TelaPedidoAlterar::class.java).apply {
                                                 putExtra("idPedido", pedido.idPedido.toString())

@@ -21,7 +21,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Cliente
@@ -38,7 +37,7 @@ import kotlin.coroutines.suspendCoroutine
 class ClienteController {
     val refCliente = Firebase.database.getReference("Clientes")
 
-    fun inserirCliente(cliente: Cliente, contexto : Context, callback: (Boolean) -> Unit){
+    fun inserirCliente(cliente: Cliente, contexto: Context, callback: (Boolean) -> Unit) {
         refCliente.child(cliente.cpf).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (!snapshot.exists()) {
@@ -68,6 +67,7 @@ class ClienteController {
                     callback(false)
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(
                     contexto,
@@ -79,9 +79,9 @@ class ClienteController {
         })
     }
 
-    fun deletarCliente(cliente: Cliente, contexto : Context, callback: (Boolean) -> Unit){
+    fun deletarCliente(cliente: Cliente, contexto: Context, callback: (Boolean) -> Unit) {
 
-        refCliente.child(cliente.cpf).addListenerForSingleValueEvent(object : ValueEventListener{
+        refCliente.child(cliente.cpf).addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
                     refCliente.child(cliente.cpf).removeValue()
@@ -93,7 +93,7 @@ class ClienteController {
                             ).show()
                             callback(true) // Sucesso na exclusão
                         }
-                        .addOnFailureListener{
+                        .addOnFailureListener {
                             Toast.makeText(
                                 contexto,
                                 "Erro ao Deletar o cliente",
@@ -101,7 +101,7 @@ class ClienteController {
                             ).show()
                             callback(false) // Falha na exclusão
                         }
-                }else{
+                } else {
                     Toast.makeText(
                         contexto,
                         "Cliente não encontrado!",
@@ -110,6 +110,7 @@ class ClienteController {
                     callback(false) // Falha na exclusão
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(
                     contexto,
@@ -122,7 +123,7 @@ class ClienteController {
     }
 
     //Finalizar
-    fun alterarCliente(cliente: Cliente, contexto: Context, callback: (Boolean) -> Unit){
+    fun alterarCliente(cliente: Cliente, contexto: Context, callback: (Boolean) -> Unit) {
         refCliente.child(cliente.cpf).addListenerForSingleValueEvent(object :
             ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -168,8 +169,8 @@ class ClienteController {
         })
     }
 
-    suspend fun carregarListaClientes(): ArrayList<Cliente> = suspendCoroutine{continuation ->
-        val listaRetorno : ArrayList<Cliente> = ArrayList()
+    suspend fun carregarListaClientes(): ArrayList<Cliente> = suspendCoroutine { continuation ->
+        val listaRetorno: ArrayList<Cliente> = ArrayList()
 
         refCliente.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -191,10 +192,11 @@ class ClienteController {
                         )
                     }
                     continuation.resume(listaRetorno)
-                }else{
+                } else {
                     continuation.resumeWithException(Exception("Nenhum Cliente encontrado no banco de dados."))
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 continuation.resumeWithException(error.toException())
             }

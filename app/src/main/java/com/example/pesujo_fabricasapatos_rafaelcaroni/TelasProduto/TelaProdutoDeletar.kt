@@ -59,7 +59,7 @@ import kotlinx.coroutines.launch
 
 class TelaProdutoDeletar : ComponentActivity() {
     lateinit var listaprodutos: ArrayList<Produto>
-    lateinit var produtoController : ProdutoController
+    lateinit var produtoController: ProdutoController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         produtoController = ProdutoController()
@@ -69,7 +69,7 @@ class TelaProdutoDeletar : ComponentActivity() {
                 setContent {
                     DeletarProduto(listaProdutos = listaprodutos)
                 }
-            }catch (e : Exception){
+            } catch (e: Exception) {
                 setContent {
                     produtoController.LoadingScreen()
                     Log.i("errorPagDeletarProduto", "${e}")
@@ -131,8 +131,8 @@ private fun DeletarProduto(listaProdutos: ArrayList<Produto>) {
                 }
                 Button(
                     onClick = {
-                        produtoController.deletarProduto(selectedItem, contexto){sucesso ->
-                            if (sucesso){
+                        produtoController.deletarProduto(selectedItem, contexto) { sucesso ->
+                            if (sucesso) {
                                 activity?.recreate()
                             }
                         }
@@ -152,7 +152,7 @@ private fun DeletarProduto(listaProdutos: ArrayList<Produto>) {
             ) {
 
                 OutlinedTextField(
-                    value = "Id: ${selectedItem.id.toString()}, Nome ${selectedItem.nome.toString()}",
+                    value = "Id: ${selectedItem.id}, Nome ${selectedItem.nome}",
                     onValueChange = {},
                     label = {
                         Text(
@@ -172,7 +172,7 @@ private fun DeletarProduto(listaProdutos: ArrayList<Produto>) {
                     })
                 ExposedDropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
                     listaProdutos.forEach { item ->
-                        DropdownMenuItem(text = { Text(text = "Id: ${item.id.toString()}, Nome: ${item.nome.toString()}") },
+                        DropdownMenuItem(text = { Text(text = "Id: ${item.id}, Nome: ${item.nome}") },
                             onClick = {
                                 selectedItem = item
                                 expanded = false
@@ -226,7 +226,7 @@ private fun DeletarProduto(listaProdutos: ArrayList<Produto>) {
                             )
                             Column(modifier = Modifier.padding(8.dp)) {
                                 Text(
-                                    text = "${selectedItem.nome.toString()}, R$ ${selectedItem.valor.toString()}",
+                                    text = "${selectedItem.nome}, R$ ${selectedItem.valor}",
                                     style = MaterialTheme.typography.titleMedium
                                 )
                                 Text(

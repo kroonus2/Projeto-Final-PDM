@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.AddCircle
@@ -145,7 +144,7 @@ private fun alterarCliente(
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            "Inserir Pedidos",
+                            "Alterar Cliente",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -225,12 +224,7 @@ private fun alterarCliente(
                                                 contentDescription = null
                                             )
                                         },
-                                        trailingIcon = {
-                                            Text(
-                                                "F11",
-                                                textAlign = TextAlign.Center
-                                            )
-                                        })
+                                    )
                                 }
                             }
                             Icon(
@@ -317,7 +311,7 @@ private fun alterarCliente(
                             unfocusedBorderColor = Color(145, 89, 150, 255)
                         )
                     )
-                    Spacer(modifier = Modifier.height(150.dp))
+                    Spacer(modifier = Modifier.height(130.dp))
                     Button(
                         onClick = {
                             val cpf = fieldCpf.value.text.toString()
@@ -358,8 +352,7 @@ private fun alterarCliente(
                             }
                         },
                         modifier = Modifier
-                            .align(Alignment.CenterHorizontally)
-                            .padding(top = 20.dp),
+                            .align(Alignment.CenterHorizontally),
                         border = BorderStroke(1.dp, Color.Magenta),
                         colors = ButtonDefaults.outlinedButtonColors(
                             contentColor = Color.Magenta

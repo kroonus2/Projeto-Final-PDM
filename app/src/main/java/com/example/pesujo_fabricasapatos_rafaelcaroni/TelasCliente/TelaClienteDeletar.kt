@@ -3,8 +3,6 @@ package com.example.pesujo_fabricasapatos_rafaelcaroni.TelasCliente
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
@@ -41,12 +39,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Cliente
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.ClienteController
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.ktx.database
-import com.google.firebase.ktx.Firebase
-import com.google.gson.Gson
 
 class TelaClienteDeletar : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -122,14 +114,14 @@ private fun DeletarCliente() {
                 Button(
                     onClick = {
                         val cliente = Cliente(
-                            fieldCpf. value.text.toString(),
+                            fieldCpf.value.text.toString(),
                             fieldNome.value.text.toString(),
                             fieldTelefone.value.text.toString(),
                             fieldEndereco.value.text.toString(),
                             fieldInsta.value.text.toString()
                         )
-                        clienteController.deletarCliente(cliente, contexto){sucesso ->
-                            if(sucesso){
+                        clienteController.deletarCliente(cliente, contexto) { sucesso ->
+                            if (sucesso) {
                                 // Limpar os campos após a atualização
                                 fieldCpf.value = TextFieldValue("")
                             }

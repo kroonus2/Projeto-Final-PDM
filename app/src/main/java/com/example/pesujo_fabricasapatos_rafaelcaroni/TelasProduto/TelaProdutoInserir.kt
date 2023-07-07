@@ -16,22 +16,41 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.outlined.AddCircle
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.List
+import androidx.compose.material.icons.outlined.Person
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Divider
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
@@ -49,14 +68,13 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Produto
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.ProdutoController
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.List
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Icon
+import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasCliente.TelaCliente
+import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasPedido.TelaPedido
 
 class TelaProdutoInserir : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,8 +100,11 @@ private fun InsercaoProdutos() {
     val fieldValor: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     val fieldImage: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
     var fieldId: MutableState<TextFieldValue> = remember { mutableStateOf(TextFieldValue()) }
+
     val contexto: Context = LocalContext.current
     val activity: Activity? = (LocalContext.current as? Activity)
+    var expanded by remember { mutableStateOf(false) }
+
     val produtoController = ProdutoController()
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val bitmap = remember { mutableStateOf<Bitmap?>(null) }
@@ -111,142 +132,257 @@ private fun InsercaoProdutos() {
                 fontSize = 32.sp
             )
         }
-        Column(modifier = Modifier.padding(70.dp, 0.dp)) {
-            Spacer(modifier = Modifier.height(50.dp))
-            OutlinedTextField(
-                value = fieldId.value, onValueChange = {
-                    fieldId.value = it
-                },
-                label = { Text(text = "#Id") },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Magenta,
-                    unfocusedBorderColor = Color(145, 89, 150, 255)
-                )
-            )
-            Spacer(modifier = Modifier.height(15.dp))
-            OutlinedTextField(
-                value = fieldNome.value, onValueChange = {
-                    fieldNome.value = it
-                },
-                label = { Text(text = "Nome") },
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Magenta,
-                    unfocusedBorderColor = Color(145, 89, 150, 255)
-                )
-            )
-            Spacer(modifier = Modifier.height(15.dp))
-            OutlinedTextField(
-                value = fieldDescricao.value, onValueChange = {
-                    fieldDescricao.value = it
-                },
-                label = { Text(text = "Descrição") },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Magenta,
-                    unfocusedBorderColor = Color(145, 89, 150, 255)
-                )
-            )
-            Spacer(modifier = Modifier.height(15.dp))
-            OutlinedTextField(
-                value = fieldValor.value, onValueChange = {
-                    fieldValor.value = it
-                },
-                label = { Text(text = "Valor (R$)") },
-                keyboardOptions = KeyboardOptions(
-                    keyboardType = KeyboardType.Number
-                ),
-                colors = TextFieldDefaults.outlinedTextFieldColors(
-                    focusedBorderColor = Color.Magenta,
-                    unfocusedBorderColor = Color(145, 89, 150, 255)
-                )
-            )
-            Spacer(modifier = Modifier.height(15.dp))
-            Button(
-                onClick = {
-                    galleryLauncher.launch("image/*")
-                },
-                modifier = Modifier
-                    .padding(15.dp, 15.dp).align(Alignment.CenterHorizontally),
-                border = BorderStroke(1.dp, Color.Red),
-                colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Black),
-            ) {
-                Text(text = "Escolha uma imagem")
-            }
-            imageUri?.let {
-                if (Build.VERSION.SDK_INT < 28) {
-                    bitmap.value = MediaStore.Images.Media.getBitmap(contexto.contentResolver, it)
-                } else {
-                    val source = ImageDecoder.createSource(contexto.contentResolver, it)
-                    bitmap.value = ImageDecoder.decodeBitmap(source)
-                }
-
-                bitmap.value?.let { btm ->
-                    Image(
-                        bitmap = btm.asImageBitmap(),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(250.dp,150.dp)
-                            .padding(30.dp).align(Alignment.CenterHorizontally)
-                    )
-                }
-            }
-            Spacer(modifier = Modifier.height(15.dp))
-            Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
-                Button(
-                    onClick = {
-                        activity?.finish()
+        Scaffold(
+            modifier = Modifier.fillMaxSize(),
+            containerColor = Color(234, 223, 235, 255),
+            bottomBar = {
+                CenterAlignedTopAppBar(
+                    title = {
+                        Text(
+                            "Inserir Produtos",
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                     },
-                    modifier = Modifier
-                        .padding(15.dp, 15.dp),
-                    border = BorderStroke(1.dp, Color.Magenta),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-                ) {
-                    Text(text = "Voltar", color = Color.DarkGray, fontSize = 16.sp)
-                }
-                Button(
-                    onClick = {
-                        val nome = fieldNome.value.text.toString()
-                        val descricao = fieldDescricao.value.text.toString()
-                        val valor = fieldValor.value.text.toString()
-                        val imagem = fieldImage.value.text.toString()
-                        val id = fieldId.value.text.toString()
-
-                        if (nome.isNotEmpty() && descricao.isNotEmpty() && valor.isNotEmpty() && id.isNotEmpty()) {
-                            val produto =
-                                Produto(nome, descricao, valor.toFloat(), null, id.toLong())
-
-                            produtoController.inserirProduto(
-                                produto, contexto,
-                                bitmap.value!!
-                            ) { sucesso ->
-                                if (sucesso) {
-                                    // Limpar os campos após a inserção
-                                    fieldNome.value = TextFieldValue("")
-                                    fieldDescricao.value = TextFieldValue("")
-                                    fieldValor.value = TextFieldValue("")
-                                    fieldImage.value = TextFieldValue("")
-                                } else {
-                                    // Limpar os campos após a inserção
-                                    fieldId.value = TextFieldValue("")
+                    actions = {
+                        IconButton(onClick = { expanded = !expanded }) {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .wrapContentSize(Alignment.TopStart)
+                            ) {
+                                DropdownMenu(
+                                    expanded = expanded,
+                                    onDismissRequest = { expanded = false }
+                                ) {
+                                    DropdownMenuItem(
+                                        text = { Text("Clientes") },
+                                        onClick = {
+                                            contexto.startActivity(
+                                                Intent(
+                                                    contexto,
+                                                    TelaCliente::class.java
+                                                )
+                                            )
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Outlined.Person,
+                                                contentDescription = null
+                                            )
+                                        })
+                                    DropdownMenuItem(
+                                        text = { Text("Produtos") },
+                                        onClick = {
+                                            contexto.startActivity(
+                                                Intent(
+                                                    contexto,
+                                                    TelaProduto::class.java
+                                                )
+                                            )
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Outlined.List,
+                                                contentDescription = null
+                                            )
+                                        })
+                                    DropdownMenuItem(
+                                        text = { Text("Pedidos") },
+                                        onClick = {
+                                            contexto.startActivity(
+                                                Intent(
+                                                    contexto,
+                                                    TelaPedido::class.java
+                                                )
+                                            )
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Outlined.AddCircle,
+                                                contentDescription = null
+                                            )
+                                        })
+                                    Divider()
+                                    DropdownMenuItem(
+                                        text = { Text("Enviar Feedback") },
+                                        onClick = {
+                                            Toast.makeText(
+                                                contexto,
+                                                "Sua mensagem será encaminhada para a caixa de mensagens",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        },
+                                        leadingIcon = {
+                                            Icon(
+                                                Icons.Outlined.Email,
+                                                contentDescription = null
+                                            )
+                                        },
+                                        trailingIcon = {
+                                            Text(
+                                                "F11",
+                                                textAlign = TextAlign.Center
+                                            )
+                                        })
                                 }
                             }
-                        } else {
-                            Toast.makeText(
-                                contexto,
-                                "Preencha todos os campos do produto",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            Icon(
+                                imageVector = Icons.Filled.Menu,
+                                contentDescription = "Localized description"
+                            )
                         }
                     },
-                    modifier = Modifier.padding(15.dp, 15.dp),
-                    border = BorderStroke(1.dp, Color.Magenta),
-                    colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
-                ) {
-                    Text(text = "Inserir", color = Color.DarkGray, fontSize = 16.sp)
+                    navigationIcon = {
+                        IconButton(onClick = { activity?.finish() }) {
+                            Icon(
+                                imageVector = Icons.Filled.KeyboardArrowLeft,
+                                contentDescription = "Voltar"
+                            )
+                        }
+                    },
+                    modifier = Modifier.background(Color(234, 223, 235, 255))
+                )
+            },
+            content = { innerPadding ->
+                Column(modifier = Modifier.padding(70.dp, 0.dp)) {
+                    Spacer(
+                        modifier = Modifier
+                            .height(50.dp)
+                            .padding(innerPadding)
+                    )
+                    OutlinedTextField(
+                        value = fieldId.value, onValueChange = {
+                            fieldId.value = it
+                        },
+                        label = { Text(text = "#Id") },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Magenta,
+                            unfocusedBorderColor = Color(145, 89, 150, 255)
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(15.dp))
+                    OutlinedTextField(
+                        value = fieldNome.value, onValueChange = {
+                            fieldNome.value = it
+                        },
+                        label = { Text(text = "Nome") },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Magenta,
+                            unfocusedBorderColor = Color(145, 89, 150, 255)
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(15.dp))
+                    OutlinedTextField(
+                        value = fieldDescricao.value, onValueChange = {
+                            fieldDescricao.value = it
+                        },
+                        label = { Text(text = "Descrição") },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text
+                        ),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Magenta,
+                            unfocusedBorderColor = Color(145, 89, 150, 255)
+                        )
+                    )
+                    Spacer(modifier = Modifier.height(15.dp))
+                    OutlinedTextField(
+                        value = fieldValor.value, onValueChange = {
+                            fieldValor.value = it
+                        },
+                        label = { Text(text = "Valor (R$)") },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Number
+                        ),
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            focusedBorderColor = Color.Magenta,
+                            unfocusedBorderColor = Color(145, 89, 150, 255)
+                        )
+                    )
+                    Button(
+                        onClick = {
+                            galleryLauncher.launch("image/*")
+                        },
+                        modifier = Modifier
+                            .padding(10.dp, 15.dp)
+                            .align(Alignment.CenterHorizontally),
+                        border = BorderStroke(1.dp, Color.Magenta),
+                        colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
+                    ) {
+                        Icon(
+                            imageVector = Icons.Filled.AddCircle,
+                            contentDescription = "Adicionar foto do produto",
+                        )
+                        Text(text = " Imagem", color = Color.DarkGray, fontSize = 16.sp)
+                    }
+                    imageUri?.let {
+                        if (Build.VERSION.SDK_INT < 28) {
+                            bitmap.value =
+                                MediaStore.Images.Media.getBitmap(contexto.contentResolver, it)
+                        } else {
+                            val source = ImageDecoder.createSource(contexto.contentResolver, it)
+                            bitmap.value = ImageDecoder.decodeBitmap(source)
+                        }
+
+                        bitmap.value?.let { btm ->
+                            Image(
+                                bitmap = btm.asImageBitmap(),
+                                contentDescription = null,
+                                modifier = Modifier
+                                    .size(250.dp, 150.dp)
+                                    .padding(30.dp)
+                                //.align(Alignment.CenterHorizontally)
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Spacer(modifier = Modifier.height(15.dp))
+                    Row(modifier = Modifier.align(Alignment.CenterHorizontally)) {
+                        Button(
+                            onClick = {
+                                val nome = fieldNome.value.text.toString()
+                                val descricao = fieldDescricao.value.text.toString()
+                                val valor = fieldValor.value.text.toString()
+                                val imagem = fieldImage.value.text.toString()
+                                val id = fieldId.value.text.toString()
+
+                                if (nome.isNotEmpty() && descricao.isNotEmpty() && valor.isNotEmpty() && id.isNotEmpty()) {
+                                    val produto =
+                                        Produto(nome, descricao, valor.toFloat(), null, id.toLong())
+
+                                    produtoController.inserirProduto(
+                                        produto, contexto,
+                                        bitmap.value!!
+                                    ) { sucesso ->
+                                        if (sucesso) {
+                                            // Limpar os campos após a inserção
+                                            fieldNome.value = TextFieldValue("")
+                                            fieldDescricao.value = TextFieldValue("")
+                                            fieldValor.value = TextFieldValue("")
+                                            fieldImage.value = TextFieldValue("")
+                                        } else {
+                                            // Limpar os campos após a inserção
+                                            fieldId.value = TextFieldValue("")
+                                        }
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        contexto,
+                                        "Preencha todos os campos do produto",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            },
+                            modifier = Modifier.padding(15.dp, 15.dp),
+                            border = BorderStroke(1.dp, Color.Magenta),
+                            colors = ButtonDefaults.outlinedButtonColors(contentColor = Color.Magenta),
+                        ) {
+                            Text(text = "Inserir", color = Color.DarkGray, fontSize = 16.sp)
+                        }
+                    }
                 }
             }
-        }
+        )
     }
 }

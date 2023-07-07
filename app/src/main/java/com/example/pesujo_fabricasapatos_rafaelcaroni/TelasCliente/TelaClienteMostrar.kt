@@ -1,6 +1,5 @@
 package com.example.pesujo_fabricasapatos_rafaelcaroni.TelasCliente
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Context
@@ -17,35 +16,24 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.CornerSize
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.outlined.AddCircle
 import androidx.compose.material.icons.outlined.Email
 import androidx.compose.material.icons.outlined.List
 import androidx.compose.material.icons.outlined.Person
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -55,7 +43,6 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MaterialTheme.typography
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -72,9 +59,7 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.lifecycleScope
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Classes.Cliente
 import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.ClienteController
-import com.example.pesujo_fabricasapatos_rafaelcaroni.Controllers.PedidoController
 import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasPedido.TelaPedido
-import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasPedido.TelaPedidoAlterar
 import com.example.pesujo_fabricasapatos_rafaelcaroni.TelasProduto.TelaProduto
 import kotlinx.coroutines.launch
 
@@ -147,7 +132,7 @@ private fun ListagemDeClientes2(listaClientes: ArrayList<Cliente>) {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            "Inserir Pedidos",
+                            "Mostrar Clientes",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -286,7 +271,8 @@ private fun ListagemDeClientes2(listaClientes: ArrayList<Cliente>) {
                                             text = "Endereço: ${cliente.endereco}",
                                             style = typography.bodyMedium
                                         )
-                                        Text(text = "Telefone: ${cliente.telefone}",
+                                        Text(
+                                            text = "Telefone: ${cliente.telefone}",
                                             style = typography.bodyMedium
                                         )
                                         Text(

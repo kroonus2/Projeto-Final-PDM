@@ -103,7 +103,7 @@ private fun ElementosDaTela() {
                 CenterAlignedTopAppBar(
                     title = {
                         Text(
-                            "Inserir Pedidos",
+                            "Fábrica de sapatos",
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
                         )
@@ -181,12 +181,6 @@ private fun ElementosDaTela() {
                                             Icon(
                                                 Icons.Outlined.Email,
                                                 contentDescription = null
-                                            )
-                                        },
-                                        trailingIcon = {
-                                            Text(
-                                                "F11",
-                                                textAlign = TextAlign.Center
                                             )
                                         })
                                 }
